@@ -1,0 +1,19 @@
+{
+	"name": "wilianmaique/php-mexc-api-v3",
+	"description": "easy to use mexc api wallet",
+	"type": "library",
+	"license": "GPL-3.0-or-later",
+	"authors": [
+		{
+			"name": "Wilian Maique"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"WilianMaique\\Mexc\\": "src/"
+		}
+	},
+	"require": {
+		"php": ">=8.1"
+	}
+}
