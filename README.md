@@ -1,14 +1,14 @@
 # MEXC-API PHP
-lib mexc api simples, para ver detalhes da conta, saldo spot, withdraw
+lib mexc api simple, for detail account, balance spot, withdraw
 info token, etc...
 
-# Instalação
+# Installation
 
 ```shell
 composer require wilianmaique/php-mexc-api-v3
 ```
 
-# Como usar
+# Use
 
 add to your config
 ```shell
