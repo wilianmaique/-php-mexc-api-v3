@@ -27,7 +27,7 @@ class Withdraw extends Time
 				'X-MEXC-APIKEY: ' . MEXC_CONFIG['MEXC_API_ACCESS_KEY'] . ''
 			],
 			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_SSL_VERIFYPEER => true,
 		]);
 
 		$res = curl_exec($ch);
@@ -36,12 +36,7 @@ class Withdraw extends Time
 			curl_close($ch);
 			return false;
 		}
-
-		$status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
-
-		if ($status_code != 200)
-			return json_decode($res, true);
 
 		return json_decode($res, true);
 	}
@@ -65,7 +60,7 @@ class Withdraw extends Time
 				'X-MEXC-APIKEY: ' . MEXC_CONFIG['MEXC_API_ACCESS_KEY'] . ''
 			],
 			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_SSL_VERIFYPEER => true,
 		]);
 
 		$res = curl_exec($ch);
@@ -78,10 +73,7 @@ class Withdraw extends Time
 		$status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
 
-		if ($status_code != 200)
-			return json_decode($res, true);
-
-		if (empty($withdrawId))
+		if ($status_code != 200 || empty($withdrawId))
 			return json_decode($res, true);
 
 		$resJson = array_filter(json_decode($res, true), function ($subarray) use ($withdrawId) {

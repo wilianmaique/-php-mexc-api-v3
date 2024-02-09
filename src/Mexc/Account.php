@@ -23,7 +23,7 @@ class Account extends Time
 				'X-MEXC-APIKEY: ' . MEXC_CONFIG['MEXC_API_ACCESS_KEY'] . ''
 			],
 			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_SSL_VERIFYPEER => true,
 		]);
 
 		$res = curl_exec($ch);
@@ -33,11 +33,7 @@ class Account extends Time
 			return false;
 		}
 
-		$status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
-
-		if ($status_code != 200)
-			return json_decode($res, true);
 
 		return json_decode($res, true);
 	}

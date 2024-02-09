@@ -1,21 +1,21 @@
-# DONATE PAYPAL
+# DISCORD
 ```shell
-p4yp4l: wilianmaique@gmail.com
+wilianmaique
 ```
 
 # MEXC-API PHP
 lib mexc api simple, for detail account, balance spot, withdraw
 info token, etc...
 
-# Installation
+***Obs: the time on your machine/server must be updated!***
 
+# Installation
 ```shell
 composer require wilianmaique/php-mexc-api-v3
 ```
 
 # Use
-
-add to your config
+add to your config/autoload
 ```shell
 const MEXC_CONFIG = [
     'MEXC_URL_API' => 'https://api.mexc.com/api/v3',

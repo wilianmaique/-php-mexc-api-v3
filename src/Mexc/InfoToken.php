@@ -26,7 +26,7 @@ class InfoToken extends Time
 				'X-MEXC-APIKEY: ' . MEXC_CONFIG['MEXC_API_ACCESS_KEY'] . ''
 			],
 			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_SSL_VERIFYPEER => true,
 		]);
 
 		$res = curl_exec($ch);
@@ -40,46 +40,59 @@ class InfoToken extends Time
 		$resJson = json_decode($res, true);
 		curl_close($ch);
 
-		if ($status_code != 200)
-			return $resJson;
-
-		if (empty($tokenCoinName))
+		if ($status_code != 200 || empty($tokenCoinName))
 			return $resJson;
 
 		$info = [];
 
 		foreach ($resJson as $resJsonValue) {
 			if ($resJsonValue['coin'] === $tokenCoinName) {
-				$info['coin'] = $tokenCoinName;
-				$info['name'] = $resJsonValue['name'];
-
-				foreach ($resJsonValue['networkList'] as $key => $value) {
-					$info['networkList'][$key]['coin'] = $value['coin'];
-					$info['networkList'][$key]['depositDesc'] = $value['depositDesc'];
-					$info['networkList'][$key]['depositEnable'] = $value['depositEnable'];
-					$info['networkList'][$key]['minConfirm'] = $value['minConfirm'];
-					$info['networkList'][$key]['name'] = $value['name'];
-					$info['networkList'][$key]['network'] = $value['network'];
-					$info['networkList'][$key]['withdrawEnable'] = $value['withdrawEnable'];
-					$info['networkList'][$key]['withdrawFee'] = $value['withdrawFee'];
-					$info['networkList'][$key]['withdrawIntegerMultiple'] = $value['withdrawIntegerMultiple'];
-					$info['networkList'][$key]['withdrawMax'] = $value['withdrawMax'];
-					$info['networkList'][$key]['withdrawMin'] = $value['withdrawMin'];
-					$info['networkList'][$key]['sameAddress'] = $value['sameAddress'];
-					$info['networkList'][$key]['contract'] = $value['contract'];
-					$info['networkList'][$key]['withdrawTips'] = $value['withdrawTips'];
-					$info['networkList'][$key]['depositTips'] = $value['depositTips'];
-				}
-
-				if (count($resJsonValue['networkList']) <= 0)
-					reset($info['networkList']);
-
-				break;
+				return self::transformInfo($resJsonValue);
 			}
 		}
 
 		if (empty($info))
 			return ['msg' => 'Token not found...'];
+
+		return $info;
+	}
+
+	/*
+	*
+	* transform array info
+	*/
+	private static function transformInfo(array $resJsonValue): array
+	{
+		$info = [
+			'msg' => 'ok',
+			'coin' => $resJsonValue['coin'],
+			'name' => $resJsonValue['name'],
+			'networkList' => [],
+		];
+
+		foreach ($resJsonValue['networkList'] as $value) {
+			$info['networkList'][] = [
+				'coin' => $value['coin'],
+				'depositDesc' => $value['depositDesc'],
+				'depositEnable' => $value['depositEnable'],
+				'minConfirm' => $value['minConfirm'],
+				'name' => $value['name'],
+				'network' => $value['network'],
+				'withdrawEnable' => $value['withdrawEnable'],
+				'withdrawFee' => $value['withdrawFee'],
+				'withdrawIntegerMultiple' => $value['withdrawIntegerMultiple'],
+				'withdrawMax' => $value['withdrawMax'],
+				'withdrawMin' => $value['withdrawMin'],
+				'sameAddress' => $value['sameAddress'],
+				'contract' => $value['contract'],
+				'withdrawTips' => $value['withdrawTips'],
+				'depositTips' => $value['depositTips'],
+			];
+		}
+
+		if (count($resJsonValue['networkList']) <= 0) {
+			reset($info['networkList']);
+		}
 
 		return $info;
 	}

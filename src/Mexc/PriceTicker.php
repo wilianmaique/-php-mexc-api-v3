@@ -19,7 +19,7 @@ class PriceTicker
 		curl_setopt_array($ch, [
 			CURLOPT_CUSTOMREQUEST => 'GET',
 			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_SSL_VERIFYPEER => true,
 		]);
 
 		$res = curl_exec($ch);
@@ -28,16 +28,14 @@ class PriceTicker
 
 		$resJson = json_decode($res, true);
 
-		if ($status_code != 200)
-			return $resJson;
-
-		if (empty($symbolToken))
+		if ($status_code != 200 || empty($symbolToken))
 			return $resJson;
 
 		$info = [];
 
 		foreach ($resJson as $key => $resJsonValue) {
 			if ($resJsonValue['symbol'] === $symbolToken) {
+				$info['msg'] = 'ok';
 				$info['symbol'] = $resJsonValue['symbol'];
 				$info['price'] = $resJsonValue['price'];
 				break;
