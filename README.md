@@ -1,8 +1,3 @@
-# DISCORD
-```shell
-wilianmaique
-```
-
 # MEXC-API PHP
 lib mexc api simple, for detail account, balance spot, withdraw
 info token, etc...
